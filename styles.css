@@ -22,7 +22,10 @@
     left: 0px;
     top: 0px;
 }
-
+button p{
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    color: #FFFFFF;
+}
 input[type=range] {
     height: 37px;
     -webkit-appearance: none;

@@ -13,9 +13,8 @@ document.getElementById("val_slider").max = 1;
 document.getElementById("val_slider").step = 0.01;
 document.getElementById("sat_slider").value = 1;
 
-function SpritePiece(imgUrl, canvasId, name){
+function SpritePiece(imgUrl, name){
     this.imgUrl = imgUrl;
-    this.canvasId = canvasId;
     this.name = name
     this.image = new Image();
     this.loadImg = function loadImg(){
@@ -36,14 +35,25 @@ function  createCanvasFromSpritePiece(sprite){
         let canvas = document.createElement("canvas");
         canvas.classList.add("spriteCanvas");
 
-        canvas.id = sprite.canvasId;
+        canvas.id = `canvas_${sprite.name}`;
         canvas.width = sprite.image.width;
         canvas.height = sprite.image.height;
 
         let ctx = canvas.getContext("2d");
         ctx.drawImage(sprite.image, 0, 0);
 
+        if(sprite.name !== "base"){
         let button = document.createElement("button");
+
+        button.id = `canvas_${sprite.name}_button`;
+
+        let button_p = document.createElement("p");
+
+        button_p.style.backgroundColor = "#FF0000";
+
+        button_p.innerText = "255, 0, 0";
+
+        button_p.id = `canvas_${sprite.name}_button_p`;
 
         button.onclick = (e) => {
             activeSprite = sprite;
@@ -54,10 +64,13 @@ function  createCanvasFromSpritePiece(sprite){
 
         button.textContent = sprite.name;
 
-        document.getElementById("canvas_container").append(canvas);
         document.getElementById("layer_change_container").append(button);
+        document.getElementById(button.id).append(button_p);
+        }
 
-        return button;
+        document.getElementById("canvas_container").append(canvas);
+        
+
     }
 
     sprite.loadImg();
@@ -65,14 +78,23 @@ function  createCanvasFromSpritePiece(sprite){
 }
 
 function colorChanged(){
-    let ctx = document.getElementById(activeSprite.canvasId).getContext("2d");
+    let ctx = document.getElementById(`canvas_${activeSprite.name}`).getContext("2d");
 
     activeSprite.h = document.getElementById("hue_slider").value;
     activeSprite.s = document.getElementById("sat_slider").value;
     activeSprite.v = document.getElementById("val_slider").value;
 
+    let button_p = document.getElementById(`canvas_${activeSprite.name}_button_p`);
+
+    let color = new HSVColour(activeSprite.h, activeSprite.s*100, activeSprite.v*100);
+    let colorRgb = color.getRGB();
+    button_p.innerText = `${Math.round(colorRgb.r)}, ${Math.round(colorRgb.g)}, ${Math.round(colorRgb.b)}`
+    button_p.style.backgroundColor = color.getCSSHexadecimalRGB();
+
+
     ctx.drawImage(activeSprite.image, 0,0);
     let imageData = ctx.getImageData(0,0,activeSprite.image.width,activeSprite.image.height);
+
     for(let i = 0; i < imageData.data.length ;i+=4){
         let newPixel = new RGBColour(imageData.data[i], imageData.data[i+1], imageData.data[i+2]).getHSV();
         newPixel.h += 360 - Number(document.getElementById("hue_slider").value);
@@ -92,9 +114,9 @@ function setPixelAt(x, y, canvas){
 }
 
 var sprite = [
- new SpritePiece("sprites/orcane/base.png", "base_canvas", "base"),
- new SpritePiece("sprites/orcane/body.png", "body_canvas", "body"),
- new SpritePiece("sprites/orcane/belly.png", "belly_canvas", "belly")
+ new SpritePiece("sprites/orcane/base.png",  "base"),
+ new SpritePiece("sprites/orcane/body.png",  "body"),
+ new SpritePiece("sprites/orcane/belly.png",  "belly")
 ]
 
 var activeSprite = sprite[1];
