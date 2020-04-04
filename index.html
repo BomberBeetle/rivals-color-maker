@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        
+    </head>
+
+    <body>
+        <div class="container">
+
+            <div class="canvas-container" id="canvas_container">
+
+            </div>
+
+            <div class="controls">
+                <div>
+                Hue
+                <input type="range" id="hue_slider" onchange="colorChanged()"/>
+                </div>
+
+                <div>
+                Saturation
+                <input type="range" id="sat_slider" onchange="colorChanged()"/>
+                </div>
+
+                <div>
+                Lightness
+                <input type="range" id="val_slider" onchange="colorChanged()"/>
+                </div>  
+            </div>
+
+            <div id="layer_change_container">
+            <bold>Change Layer:</bold>
+            </div>
+        </div>
+    </body>
+    <script src="Colour.js"></script>
+    <script src="scripts.js"></script>
+</html>
